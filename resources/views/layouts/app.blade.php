@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>InfyOm Generator</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-
+	<meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
@@ -102,7 +102,28 @@
 
 <!-- AdminLTE App -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script>
-
+<script type="text/javascript">
+$(document).ready(function(){
+	$.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+	});
+	$("#delete").click(function(){
+		result = confirm("Are you sure want to delete?");
+		if(result == true){
+			$.post({
+				url: $(this).attr("href"),
+				data: '_method=DELETE',  // user.destroy
+			}).done(function () {
+				alert("hapus berhasil");
+				location.reload();
+			});
+		}
+		return false;
+	});
+});
+</script>
 @yield('scripts')
 </body>
 </html>
